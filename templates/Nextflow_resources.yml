@@ -1,0 +1,307 @@
+---
+    AWSTemplateFormatVersion: '2010-09-09'
+    Description: >-
+      (WWPS-GLS-WF-NEXTFLOW) Creates resources specific to running Nextflow on AWS (adapted from nextflow-resources.template.yaml by @wleepang, @JamesSeward)
+    
+    
+    Mappings:
+      TagMap:
+        default:
+          architecture: "genomics-workflows"
+          solution: "nextflow"
+          tags:
+            - Key: "architecture"
+              Value: "genomics-workflows"
+            - Key: "solution"
+              Value: "nextflow"
+    
+    
+    Metadata:
+      AWS::CloudFormation::Interface:
+        ParameterGroups:
+          - Label:
+              default: "Required"
+            Parameters:
+              - S3DataBucketName
+              - S3NextflowBucketName
+              - ExistingBucket
+              - BatchDefaultJobQueue
+          - Label:
+              default: "Optional"
+            Parameters:
+              - NextflowContainerImage
+              - S3NextflowPrefix
+              - S3LogsDirPrefix
+              - S3WorkDirPrefix
+    
+    
+    Parameters:
+      S3DataBucketName:
+        Type: String
+        Description: >-
+          S3 Bucket used to store input and output data for the workflow.
+          This should bucket should already exist.
+        
+      S3NextflowBucketName:
+        Type: String
+        Description: >-
+          S3 Bucket used to store Nextflow metadata (session cache, logs, and intermediate results)
+        
+      ExistingBucket:
+        Type: String
+        Description: >-
+          Does the S3 Bucket for Nextflow metadata already exist?  If not, it will be created.
+        AllowedValues:
+          - Yes
+          - No
+        Default: No
+      
+      S3NextflowPrefix:
+        Type: String
+        Description: >-
+          (Optional) Parent folder in the Nextflow metadata bucket for metadata folders.
+          Used only if the Nextflow metadata bucket is the same as the Data bucket.
+        Default: _nextflow
+    
+      S3LogsDirPrefix:
+        Type: String
+        Description: >-
+          (Optional) Folder in the Nextflow metadata bucket (under the {Nextflow Prefix} if needed)
+          for session cache and logs.
+        Default: logs
+      
+      S3WorkDirPrefix:
+        Type: String
+        Description: >-
+          (Optional) Folder in the Nextflow metadata bucket (under the {Nextflow Prefix} if needed)
+          that contains workflow intermediate results
+        Default: runs
+      
+      NextflowContainerImage:
+        Type: String
+        Description: >-
+          (Optional) Container image for nextflow with custom entrypoint for config and workflow
+          script staging. (Example, "<dockerhub-user>/nextflow:latest").  
+          Provide this if you have a specific version of nextflow you want to use, otherwise a 
+          container will be built using the latest version. 
+    
+      BatchDefaultJobQueue:
+        Type: String
+        Description: >-
+          ARN of the Batch Job Queue to use by default for workflow tasks.
+      
+      BatchHighPriorityJobQueue:
+        Type: String
+        Description: >-
+          ARN of the Batch Job Queue to use for high priority workflow tasks.
+      
+      TemplateRootUrl:
+        Type: String
+        Description: >-
+          Root URL for where nested templates are stored
+        Default: https://s3.amazonaws.com/aws-genomics-workflows/templates
+        ConstraintDescription: >-
+          Must be a valid S3 URL
+        AllowedPattern: "https://s3(-[a-z0-9]+)*\\.amazonaws\\.com/[a-z0-9-./]{3,}"
+    
+    Conditions:
+      DataBucketIsNextflowBucket:
+        Fn::Equals:
+          - !Ref S3NextflowBucketName
+          - !Ref S3DataBucketName
+      
+      BuildNextflowContainer:
+        Fn::Equals:
+          - !Ref NextflowContainerImage
+          - ""
+    
+      NextflowBucketDoesNotExist:
+        Fn::Equals:
+          - !Ref ExistingBucket
+          - No
+    
+    
+    Resources:
+      S3NextflowBucket:
+        Type: AWS::S3::Bucket
+        Condition: NextflowBucketDoesNotExist
+        DeletionPolicy: Retain
+        UpdateReplacePolicy: Retain
+        Properties:
+          BucketName: !Ref S3NextflowBucketName
+          BucketEncryption:
+            ServerSideEncryptionConfiguration:
+              - ServerSideEncryptionByDefault:
+                 SSEAlgorithm: AES256
+          Tags: !FindInMap ["TagMap", "default", "tags"]
+        
+      ContainerBuildNextflow:
+        Type: AWS::CloudFormation::Stack
+        Condition: BuildNextflowContainer
+        Properties:
+          TemplateURL: !Sub ${TemplateRootUrl}/_common/container-build.template.yaml
+          Parameters:
+            ContainerName: nextflow
+            GitRepoType: GITHUB
+            GitCloneUrlHttp: https://github.com/aws-samples/aws-genomics-workflows.git
+            ProjectPath: ./src/containers/nextflow
+            ProjectBuildSpecFile: ./src/containers/buildspec-nextflow.yml
+            CreateBatchJobDefinition: "No"
+          Tags: !FindInMap ["TagMap", "default", "tags"]
+      
+      IAMNextflowJobRole:
+        Type: AWS::IAM::Role
+        Properties:
+          Policies:
+            - PolicyName: !Sub Nextflow-Batch-Access-${AWS::Region}
+              PolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                  # Nextflow requires full read access to gather the state of jobs being executed
+                  - Sid: "AWSBatchReadAccessAll"
+                    Effect: Allow
+                    Resource: "*"
+                    Action:
+                      - "batch:List*"
+                      - "batch:Describe*"
+                  
+                  # only permit access (job submission) to the queues and compute environments
+                  # configured to run nextflow    
+                  - Sid: "AWSBatchWriteAccessJobSubmission"
+                    Effect: Allow
+                    Resource:
+                      - !Ref BatchDefaultJobQueue
+                      - !Ref BatchHighPriorityJobQueue
+                    Action:
+                      - "batch:*Job"
+                  
+                  # nextflow needs to be able to create job definitions
+                  # these are prefixed with "nf-"
+                  - Sid: "AWSBatchWriteAccessJobDefinitions"
+                    Effect: Allow
+                    Resource:
+                      - arn:aws:batch:*:*:job-definition/nf-*:*
+                    Action:
+                      - "batch:*JobDefinition"
+    
+            - PolicyName: !Sub Nextflow-S3Bucket-Access-${AWS::Region}
+              PolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                  - Effect: Allow
+                    Resource:
+                      Fn::If:
+                        - DataBucketIsNextflowBucket
+    
+                        - - !Join ["", ["arn:aws:s3:::", !Ref S3DataBucketName]]
+                          - !Join ["", ["arn:aws:s3:::", !Ref S3DataBucketName, "/*"]]
+    
+                        - - !Join ["", ["arn:aws:s3:::", !Ref S3DataBucketName]]
+                          - !Join ["", ["arn:aws:s3:::", !Ref S3DataBucketName, "/*"]]
+                          - !Join ["", ["arn:aws:s3:::", !Ref S3NextflowBucketName]]
+                          - !Join ["", ["arn:aws:s3:::", !Ref S3NextflowBucketName, "/*"]]
+                    Action:
+                      - "s3:*"
+          AssumeRolePolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Principal:
+                  Service:
+                    - "ecs-tasks.amazonaws.com"
+                Action:
+                  - "sts:AssumeRole"
+          ManagedPolicyArns:
+            - "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+    
+      BatchNextflowJobDefinition:
+        Type: AWS::Batch::JobDefinition
+        Properties:
+          Type: container
+          ContainerProperties: 
+            Memory: 1024
+            JobRoleArn: !GetAtt IAMNextflowJobRole.Arn
+            Vcpus: 2
+            Image:
+              Fn::If:
+                - BuildNextflowContainer
+                - !Sub ${ContainerBuildNextflow.Outputs.ContainerImage}
+                - !Ref NextflowContainerImage
+            Environment:
+              - Name: "NF_JOB_QUEUE"
+                Value: !Ref BatchDefaultJobQueue
+              - Name: "NF_LOGSDIR"
+                Value: 
+                  Fn::Join: 
+                    - "/"
+                    - - Fn::If:
+                          - DataBucketIsNextflowBucket
+                          - !Join ["/", [!Sub "s3://${S3NextflowBucketName}", !Ref S3NextflowPrefix]]
+                          - !Sub "s3://${S3NextflowBucketName}"
+                      - !Ref S3LogsDirPrefix
+              - Name: "NF_WORKDIR"
+                Value: 
+                  Fn::Join: 
+                    - "/"
+                    - - Fn::If:
+                          - DataBucketIsNextflowBucket
+                          - !Join ["/", [!Sub "s3://${S3NextflowBucketName}", !Ref S3NextflowPrefix]]
+                          - !Sub "s3://${S3NextflowBucketName}"
+                      - !Ref S3WorkDirPrefix
+                  
+          JobDefinitionName: nextflow
+    
+    
+    Outputs:
+      NextflowBucket:
+        Description: >-
+          S3 Bucket used to store Nextflow metadata (session cache, logs, and intermediate results)
+        Value:
+          Fn::If:
+            - NextflowBucketDoesNotExist
+            - !Ref S3NextflowBucket
+            - !Ref S3NextflowBucketName
+      
+      LogsDir:
+        Description: >-
+          S3 URI where nextflow session cache and logs are stored.
+        Value:
+          Fn::Join:
+            - "/"
+            - - Fn::If:
+                  - DataBucketIsNextflowBucket
+                  - !Join ["/", [!Sub "s3://${S3NextflowBucketName}", !Ref S3NextflowPrefix]]
+                  - !Sub "s3://${S3NextflowBucketName}"
+              - !Ref S3LogsDirPrefix
+    
+      WorkDir:
+        Description: >-
+          S3 URI where workflow intermediate results are stored.
+        Value:
+          Fn::Join: 
+            - "/"
+            - - Fn::If:
+                  - DataBucketIsNextflowBucket
+                  - !Join ["/", [!Sub "s3://${S3NextflowBucketName}", !Ref S3NextflowPrefix]]
+                  - !Sub "s3://${S3NextflowBucketName}"
+              - !Ref S3WorkDirPrefix
+    
+      NextflowContainerImage:
+        Description: >-
+          The nextflow container used.
+        Value:
+          Fn::If:
+            - BuildNextflowContainer
+            - !Sub ${ContainerBuildNextflow.Outputs.ContainerImage}
+            - !Ref NextflowContainerImage
+    
+      NextflowJobDefinition:
+        Description: >-
+          Batch Job Definition that creates a nextflow head node for running workflows
+        Value: !Ref BatchNextflowJobDefinition
+      
+      NextflowJobRole:
+        Description: >-
+          IAM Role that allows the nextflow head node job access to S3 and Batch
+        Value: !GetAtt IAMNextflowJobRole.Arn
+...
