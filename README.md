@@ -60,7 +60,7 @@ jobs:
             AWS_ACCESS_KEY_ID: ${{secrets.AWS_KEY_ID}}
             AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_KEY_SECRET}}
           run: |
-            aws batch submit-job --region eu-west-1 --job-name nf-core-sarek --job-queue 'default-8b3836e0-5eda-11ea-96e5-0a2c3f6a2a32' --job-definition nextflow --container-overrides command=nf-core/sarek,"-profile test"
+            aws batch submit-job --region <region> --job-name <name> --job-queue '<queue-name>' --job-definition nextflow --container-overrides command=nf-core/<mypipelinename>,"-profile test"
 
 ```
 
