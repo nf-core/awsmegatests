@@ -304,5 +304,4 @@
         Description: >-
           IAM Role that allows the nextflow head node job access to S3 and Batch
         Value: !GetAtt IAMNextflowJobRole.Arn
-    ...
-    
+...
