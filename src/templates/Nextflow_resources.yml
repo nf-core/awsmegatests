@@ -180,9 +180,10 @@ Resources:
               - Sid: "AWSBatchWriteAccessJobDefinitions"
                 Effect: Allow
                 Resource:
-                  - arn:aws:batch:*:*:job-definition/nf-*:*
+                  - arn:aws:batch:*:*:job-definition/*
                 Action:
                   - "batch:*JobDefinition"
+                  - "batch:SubmitJob"
 
         - PolicyName: !Sub Nextflow-S3Bucket-Access-${AWS::Region}
           PolicyDocument:
