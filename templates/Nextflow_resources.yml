@@ -181,8 +181,10 @@ Resources:
                 Effect: Allow
                 Resource:
                   - arn:aws:batch:*:*:job-definition/*
+                  - arn:aws:sts:*:*:assumed-role/*
                 Action:
                   - "batch:*JobDefinition"
+                  - "batch:*JobDefinitions"
                   - "batch:SubmitJob"
 
         - PolicyName: !Sub Nextflow-S3Bucket-Access-${AWS::Region}
