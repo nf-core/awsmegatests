@@ -29,7 +29,6 @@ jobs:
             AWS_JOB_DEFINITION: ${{ secrets.AWS_JOB_DEFINITION }}
             AWS_JOB_QUEUE: ${{ secrets.AWS_JOB_QUEUE }}
             AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-
           run: |
             aws batch submit-job \
             --region eu-west-1 \
