@@ -138,6 +138,7 @@ Resources:
   ContainerBuildNextflow:
     Type: AWS::CloudFormation::Stack
     Condition: BuildNextflowContainer
+    DeletionPolicy: Delete
     Properties:
       TemplateURL: !Sub ${TemplateRootUrl}/_common/container-build.template.yaml
       Parameters:
@@ -151,6 +152,7 @@ Resources:
   
   IAMNextflowJobRole:
     Type: AWS::IAM::Role
+    DeletionPolicy: Delete
     Properties:
       Policies:
         - PolicyName: !Sub Nextflow-Batch-Access-${AWS::Region}
@@ -181,7 +183,6 @@ Resources:
                 Effect: Allow
                 Resource:
                   - arn:aws:batch:*:*:job-definition/*
-                  - arn:aws:sts:*:*:assumed-role/*
                 Action:
                   - "batch:*JobDefinition"
                   - "batch:*JobDefinitions"
@@ -219,6 +220,7 @@ Resources:
 
   BatchNextflowJobDefinition:
     Type: AWS::Batch::JobDefinition
+    DeletionPolicy: Delete
     Properties:
       Type: container
       ContainerProperties: 
