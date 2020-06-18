@@ -65,7 +65,14 @@ The template used in this step is based on the template available here: ['Option
 7. Acknowledge the capabilities and create stack.
 
 ### Setup GitHub Actions
-In order to set up GitHub Actions, the following script has to be added to the ./github/workflows folder. 
+A GitHub Actions workflow example to trigger the AWS tests can be found [here](.github/workflows/awstest.yml). The secrets that it uses need to be set up at an organization level, so that all pipelines can use them:
+
+* AWSTEST_KEY_ID: IAM key ID for the AWS user in the nf-core account organization. A specific user was set with restricted roles to run these tests.
+* AWSTEST_KEY_SECRET: IAM key secret for the same user.
+* AWSTEST_TOWER_TOKEN: token for Nextflow tower, to be able to track all pipeline tests running on AWS.
+* AWS_JOB_DEFINITION: this job definition needs to be created once manually on AWS batch and can then be used in all pipeline runs. Currently, it is called `nextflow`.
+* AWS_JOB_QUEUE: the name of the default queue that was created with CloudFormation templates.
+* AWS_S3_BUCKET: the name of the s3 bucket specified during the template launch (nf-core-awsmegatests).
 ```
 name: AWS Megatests
 # This workflow is triggered on pushes and PRs to the repository.
