@@ -29,7 +29,7 @@ If an S3 bucket does not exist yet, create an S3 bucket to store the run interme
 2. Navigate to `S3`
 3. Create new bucket, remember the name, i.e.:  `nf-core-awsmegatests`
 
-### Step 1: set up a Virtual Private Cloud (VPC)
+### Step 1: Set up a Virtual Private Cloud (VPC)
 
 1. Our template is based on the template on this tutorial: ['Launch Quick Start'](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/create/template?stackName=Quick-Start-VPC&templateURL=https://aws-quickstart.s3.amazonaws.com/quickstart-aws-vpc/templates/aws-vpc.template). You can directly launch this one, or the [VPCsetup.yml](./templates/VPCsetup.yml) template in this repository.
 
@@ -55,7 +55,7 @@ The template used in this step is based on the template available here: ['Option
 9. Set max spot bid % to a reasonable number (e.g. 60 %), alter any other defaults settings as necessary. We left the rest of the settings by default
 10. Follow to the next step of the wizard, acknowledge the capabilities and create stack.
 
-### Setup Nextflow resources
+### Set up Nextflow resources
 1. Launch the [Nextflow resources template](./templates/Nextflow_resources.yml)
 2. Provide a name to the stack (e.g. NextflowResources).
 3. Provide the S3 bucket name for the data and nextflow logs (we provided the `nf-core-awstests` bucket). The bucket must exist.
@@ -64,7 +64,7 @@ The template used in this step is based on the template available here: ['Option
 6. Provide the high priority job queue ARNs generated as output of the previous template.
 7. Acknowledge the capabilities and create stack.
 
-### Setup GitHub Actions
+### Set up GitHub Actions
 A GitHub Actions workflow example to trigger the AWS tests can be found [here](.github/workflows/awstest.yml). The secrets that it uses need to be set up at an organization level, so that all pipelines can use them:
 
 * AWSTEST_KEY_ID: IAM key ID for the AWS user in the nf-core account organization. A specific user was set with restricted roles to run these tests.
