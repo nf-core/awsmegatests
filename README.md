@@ -31,7 +31,7 @@ If an S3 bucket does not exist yet, create an S3 bucket to store the run interme
 
 ### Step 1: set up a Virtual Private Cloud (VPC)
 
-1. ['Launch Quick Start'](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/create/template?stackName=Quick-Start-VPC&templateURL=https://aws-quickstart.s3.amazonaws.com/quickstart-aws-vpc/templates/aws-vpc.template) 
+1. Our template is based on the template on this tutorial: ['Launch Quick Start'](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/create/template?stackName=Quick-Start-VPC&templateURL=https://aws-quickstart.s3.amazonaws.com/quickstart-aws-vpc/templates/aws-vpc.template). You can directly launch this one, or the [VPCsetup.yml](./templates/VPCsetup.yml) template in this repository.
 
 :warning: Check that the region in which you are launching all the templates is the desired region. In our case, we set up all the infrastructure in `eu-west-1`.
 
