@@ -56,7 +56,13 @@ The template used in this step is based on the template available here: ['Option
 10. Follow to the next step of the wizard, acknowledge the capabilities and create stack.
 
 ### Setup Nextflow resources
-
+1. Launch the [Nextflow resources template](./templates/Nextflow_resources.yml)
+2. Provide a name to the stack (e.g. NextflowResources).
+3. Provide the S3 bucket name for the data and nextflow logs (we provided the `nf-core-awstests` bucket). The bucket must exist.
+4. Provide the default job queue ARNs that were generated as output when running the previous template.
+5. Leave the Nextflow container image field empty. You can leave the optional fields as default.
+6. Provide the high priority job queue ARNs generated as output of the previous template.
+7. Acknowledge the capabilities and create stack.
 
 ### Setup GitHub Actions
 In order to set up GitHub Actions, the following script has to be added to the ./github/workflows folder. 
