@@ -29,7 +29,7 @@ If an S3 bucket does not exist yet, create an S3 bucket to store the run interme
 2. Navigate to `S3`
 3. Create new bucket, remember the name, i.e.:  `nf-core-awsmegatests`
 
-### Set up a Virtual Private Cloud (VPC)
+### Step 1: set up a Virtual Private Cloud (VPC)
 
 1. ['Launch Quick Start'](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/create/template?stackName=Quick-Start-VPC&templateURL=https://aws-quickstart.s3.amazonaws.com/quickstart-aws-vpc/templates/aws-vpc.template) 
 
