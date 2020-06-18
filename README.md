@@ -37,7 +37,7 @@ If an S3 bucket does not exist yet, create an S3 bucket to store the run interme
 
 2. Under `CloudFormation`, select 'Create Template' with new resources.
 3. Select 'Template is ready' and 'Upload a template file'
-4. Use [VPCsetup.yml](https://github.com/nf-core/awsmegatests/blob/master/templates/VPCsetup.yml)
+4. Upload the template [VPCsetup.yml](https://github.com/nf-core/awsmegatests/blob/master/templates/VPCsetup.yml)
 5. Set 'Availability Zones' to `eu-west-1, eu-west-2, eu-west-3`
 6. Set 'Number of Availability Zones' to `3`
 7. ?
