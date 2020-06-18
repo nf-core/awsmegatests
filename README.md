@@ -20,9 +20,7 @@ The pipeline's progress can be monitored on nf-core's nextflow tower instance. T
 
 This process was set up by following this [guide](https://docs.opendata.aws/genomics-workflows/quick-start/) but some of the templates were adapted to include missing permission, so we recommend to use the templates in this repository instead.
 
-### Set up permissions
-
-### (Create an S3 bucket)
+### (Step 0: Create an S3 bucket)
 
 If an S3 bucket does not exist yet, create an S3 bucket to store the run intermediate files and results. An S3 bucket was created to store all `work` and `results` directories for the AWS tests: `S3:nf-core-awsmegatests`.
 1. Log in to AWS
@@ -42,7 +40,7 @@ If an S3 bucket does not exist yet, create an S3 bucket to store the run interme
 6. Set 'Number of Availability Zones' to `3`
 7. Follow to the next steps of the wizard, acknowledge the capabilities and create stack.
 
-### Set up Core Environment
+### Step 2: Set up Core Environment
 The template used in this step is based on the template available here: ['Option A: Full Stack'](https://docs.opendata.aws/genomics-workflows/quick-start/):
 1. Press 'Launch Stack'
 2. Select 'Template is ready'
@@ -55,7 +53,7 @@ The template used in this step is based on the template available here: ['Option
 9. Set max spot bid % to a reasonable number (e.g. 60 %), alter any other defaults settings as necessary. We left the rest of the settings by default
 10. Follow to the next step of the wizard, acknowledge the capabilities and create stack.
 
-### Set up Nextflow resources
+### Step 3: Set up Nextflow resources
 1. Launch the [Nextflow resources template](./templates/Nextflow_resources.yml)
 2. Provide a name to the stack (e.g. NextflowResources).
 3. Provide the S3 bucket name for the data and nextflow logs (we provided the `nf-core-awstests` bucket). The bucket must exist.
@@ -64,7 +62,7 @@ The template used in this step is based on the template available here: ['Option
 6. Provide the high priority job queue ARNs generated as output of the previous template.
 7. Acknowledge the capabilities and create stack.
 
-### Set up GitHub Actions
+### Step 4: Set up GitHub Actions
 A GitHub Actions workflow example to trigger the AWS tests can be found [here](.github/workflows/awstest.yml). The secrets that it uses need to be set up at an organization level, so that all pipelines can use them:
 
 * AWSTEST_KEY_ID: IAM key ID for the AWS user in the nf-core account organization. A specific user was set with restricted roles to run these tests.
