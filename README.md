@@ -43,7 +43,7 @@ If an S3 bucket does not exist yet, create an S3 bucket to store the run interme
 7. ?
 
 ### Set up Core Environment
-Follow the instructions in ['Option A: Full Stack'](https://docs.opendata.aws/genomics-workflows/quick-start/):
+The template used in this step is based on the template available here: ['Option A: Full Stack'](https://docs.opendata.aws/genomics-workflows/quick-start/):
 1. Press 'Launch Stack'
 2. Select 'Template is ready'
 3. Select 'Upload a template file'
