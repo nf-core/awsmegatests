@@ -48,7 +48,7 @@ The template used in this step is based on the template available here: ['Option
 2. Select 'Template is ready'
 3. Select 'Upload a template file'
 4. Use [GWFcore.yml](https://github.com/nf-core/awsmegatests/blob/master/templates/GWFcore.yml) and press 'Next'
-5. Set 'S3 bucket name' to `nf-core-awsmegatests` (previously created)
+5. Follow the launch wizard. Give the stack a name (e.g. GWFcore). 
 6. Set 'Existing bucket' to `true`
 7. Set 'Workflow orchestrator' to `Nextflow`
 8. Private subnet -> VPC created on previous step (check on previous step in resources tab), private subnet 1A/2A/3A
