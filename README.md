@@ -40,7 +40,7 @@ If an S3 bucket does not exist yet, create an S3 bucket to store the run interme
 4. Upload the template [VPCsetup.yml](https://github.com/nf-core/awsmegatests/blob/master/templates/VPCsetup.yml)
 5. Set 'Availability Zones' to `eu-west-1, eu-west-2, eu-west-3`
 6. Set 'Number of Availability Zones' to `3`
-7. ?
+7. Follow to the next steps of the wizard, acknowledge the capabilities and create stack.
 
 ### Set up Core Environment
 The template used in this step is based on the template available here: ['Option A: Full Stack'](https://docs.opendata.aws/genomics-workflows/quick-start/):
