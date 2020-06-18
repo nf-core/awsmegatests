@@ -18,7 +18,7 @@ The pipeline's progress can be monitored on nf-core's nextflow tower instance. T
 
 ## Steps
 
-This process was setup by following this [guide](https://docs.opendata.aws/genomics-workflows/quick-start/) and customizing a few steps.
+This process was set up by following this [guide](https://docs.opendata.aws/genomics-workflows/quick-start/) but some of the templates were adapted to include missing permission, so we recommend to use the templates in this repository instead.
 
 ### Set up permissions
 
@@ -93,4 +93,3 @@ jobs:
 ```
 #### Description
 `Miniconda` is needed to install up `awscli`. In order to use `Miniconda` the latest stable release of a GitHub Action offered from the [marketplace](https://github.com/marketplace/actions/setup-miniconda) is used. Subsequently, `awscli` is installed via the `conda-forge` channel. For accessing the nf-core AWS account as well the nextflow tower instance, secrets have to be set. This can only be done by one of the core members within the repository under Settings > Secrets > Add new secret.
-
