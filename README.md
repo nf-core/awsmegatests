@@ -24,7 +24,7 @@ This process was set up by following this [guide](https://docs.opendata.aws/geno
 
 ### (Create an S3 bucket)
 
-There is a central bucket setup for all wor
+If an S3 bucket does not exist yet, create an S3 bucket to store the run intermediate files and results. An S3 bucket was created to store all `work` and `results` directories for the AWS tests: `S3:nf-core-awsmegatests`.
 1. Log in to AWS
 2. Navigate to `S3`
 3. Create new bucket, remember the name, i.e.:  `nf-core-awsmegatests`
