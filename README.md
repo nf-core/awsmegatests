@@ -49,7 +49,7 @@ The template used in this step is based on the template available here: ['Option
 3. Select 'Upload a template file'
 4. Use [GWFcore.yml](https://github.com/nf-core/awsmegatests/blob/master/templates/GWFcore.yml) and press 'Next'
 5. Follow the launch wizard. Give the stack a name (e.g. GWFcore). 
-6. Set 'Existing bucket' to `true`
+6. Set 'S3 bucket name' to `nf-core-awsmegatests` (or the name specified in the previous step).  Set existing to 'true' if the S3 bucket exists.
 7. Set 'Workflow orchestrator' to `Nextflow`
 8. Private subnet -> VPC created on previous step (check on previous step in resources tab), private subnet 1A/2A/3A
 9. Set max spot bid % to a reasonable number (e.g. 60 %), alter any other defaults settings as necessary. We left the rest of the settings by default
