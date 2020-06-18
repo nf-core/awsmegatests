@@ -5,7 +5,10 @@ for aws megatests.
 
 ## Process
 
-When a a pull request is made to a pipeline's master branch, a GitHub Action is triggered. It starts an AWS batch job, which has permissions to subsequently spawn more AWS batch jobs. The first batch job pulls the nf-core pipeline from GitHub and starts it. The running pipeline can access a previously created S3 bucket to store any output files, such as the work directory, the trace directory, and the results. The pipeline's progress can be monitored on nf-core's nextflow tower instance. The final results are provided to nf-co.re. 
+When this GitHub Action workflow is triggered, it starts an AWS batch job, which has permissions to subsequently spawn more AWS batch jobs. 
+The first batch job pulls the nf-core pipeline from GitHub and starts it. 
+The running pipeline can access a previously created S3 bucket to store any output files, such as the work directory, the trace directory, and the results. 
+The pipeline's progress can be monitored on nf-core's nextflow tower instance. The final results are provided to nf-co.re. 
 
 ![AWS_megatests](AWS_megatests.png)
 
@@ -90,5 +93,4 @@ jobs:
 ```
 #### Description
 `Miniconda` is needed to install up `awscli`. In order to use `Miniconda` the latest stable release of a GitHub Action offered from the [marketplace](https://github.com/marketplace/actions/setup-miniconda) is used. Subsequently, `awscli` is installed via the `conda-forge` channel. For accessing the nf-core AWS account as well the nextflow tower instance, secrets have to be set. This can only be done by one of the core members within the repository under Settings > Secrets > Add new secret.
-
 
