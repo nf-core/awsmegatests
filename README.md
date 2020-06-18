@@ -33,7 +33,7 @@ If an S3 bucket does not exist yet, create an S3 bucket to store the run interme
 
 1. ['Launch Quick Start'](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/create/template?stackName=Quick-Start-VPC&templateURL=https://aws-quickstart.s3.amazonaws.com/quickstart-aws-vpc/templates/aws-vpc.template) 
 
-:warning: Check region
+:warning: Check that the region in which you are launching all the templates is the desired region. In our case, we set up all the infrastructure in `eu-west-1`.
 
 2. Select 'Template is ready'
 3. Select 'Upload a template file'
