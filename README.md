@@ -52,6 +52,8 @@ The template used in this step is based on the template available here: ['Option
 6. Set 'Existing bucket' to `true`
 7. Set 'Workflow orchestrator' to `Nextflow`
 8. Private subnet -> VPC created on previous step (check on previous step in resources tab), private subnet 1A/2A/3A
+9. Set max spot bid % to a reasonable number (e.g. 60 %), alter any other defaults settings as necessary. We left the rest of the settings by default
+10. Follow to the next step of the wizard, acknowledge the capabilities and create stack.
 
 ### Setup Nextflow resources
 
