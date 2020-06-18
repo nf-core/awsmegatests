@@ -73,38 +73,6 @@ A GitHub Actions workflow example to trigger the AWS tests can be found [here](.
 * AWS_JOB_DEFINITION: this job definition needs to be created once manually on AWS batch and can then be used in all pipeline runs. Currently, it is called `nextflow`.
 * AWS_JOB_QUEUE: the name of the default queue that was created with CloudFormation templates.
 * AWS_S3_BUCKET: the name of the s3 bucket specified during the template launch (nf-core-awsmegatests).
-```
-name: AWS Megatests
-# This workflow is triggered on pushes and PRs to the repository.
-# Currently the -profile 'test' is used on AWS batch. In the future 
-# this will be replaced by using actual data sets as test data.
 
-on:
-  pull_request:
-    branches:
-    - 'master'
-  release:
-    types: [published]
-
-jobs:
-  run-awstest:
-    name: Run AWS test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup Miniconda
-        uses: goanpeca/setup-miniconda@v1.0.2
-        with:
-          auto-update-conda: true
-          python-version: 3.7
-      - name: Install awscli
-        run: conda install -c conda-forge awscli
-      - name: Start AWS batch job
-        env:
-          AWS_ACCESS_KEY_ID: ${{secrets.AWS_KEY_ID}}
-          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_KEY_SECRET}}
-          TOWER_ACCESS_TOKEN: ${{secrets.TOWER_ACCESS_TOKEN}}
-        run: |
-          aws batch submit-job --region eu-west-1 --job-name <name> --job-queue '<queue name>' --job-definition nextflow --container-overrides command=nf-core/<pipeline name>,"-r ${GITHUB_SHA} -profile <AWS test profile> --outdir s3://nf-core-awsmegatests/<pipeline name>/results-${GITHUB_SHA} -w s3://nf-core-awsmegatests/<pipeline name>/work-${GITHUB_SHA}" 
-```
 The GitHub actions workflow installs `Miniconda` as it is needed to install up `awscli`. In order to use `Miniconda` the latest stable release of a GitHub Action offered from the [marketplace](https://github.com/marketplace/actions/setup-miniconda) is used. Subsequently, `awscli` is installed via the `conda-forge` channel. 
 For accessing the nf-core AWS account as well the nextflow tower instance, secrets have to be set. This can only be done by one of the core members within the repository under Settings > Secrets > Add new secret.
