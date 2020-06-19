@@ -118,6 +118,7 @@ Parameters:
 Resources:
   S3Stack:
     Type: AWS::CloudFormation::Stack
+    DeletionPolicy: Delete
     Properties:
       TemplateURL: !Sub ${TemplateRootUrl}/aws-genomics-s3.template.yaml
       TimeoutInMinutes: 5
@@ -127,6 +128,7 @@ Resources:
   
   IamStack:
     Type: AWS::CloudFormation::Stack
+    DeletionPolicy: Delete
     DependsOn: S3Stack
     Properties:
       TemplateURL: !Sub ${TemplateRootUrl}/aws-genomics-iam.template.yaml
@@ -136,6 +138,7 @@ Resources:
   
   LaunchTplStack:
     Type: AWS::CloudFormation::Stack
+    DeletionPolicy: Delete
     Properties:
       TemplateURL: !Sub ${TemplateRootUrl}/aws-genomics-launch-template.template.yaml
       Parameters:
@@ -144,6 +147,7 @@ Resources:
   
   BatchStack:
     Type: AWS::CloudFormation::Stack
+    DeletionPolicy: Delete
     DependsOn:
       - IamStack
       - LaunchTplStack
