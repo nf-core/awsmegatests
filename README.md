@@ -1,6 +1,6 @@
 # AWSmegatests: running nf-core pipeline tests on AWS
 
-CloudFormation templates to setup the necessary cloud infrastructure
+CloudFormation templates to set up the necessary cloud infrastructure
 for AWS pipeline tests.
 
 - [Process overview](#process-overview)
