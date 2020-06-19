@@ -125,6 +125,8 @@ Therefore a queue can be created from the "ondemand" compute environment that wa
 
 ## Launch your AWS jobs with Nextflow Tower
 
+Go to tower.nf and follow these steps:
+
 1. Create a compute environment
 
 - Choose a name
