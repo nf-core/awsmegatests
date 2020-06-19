@@ -129,18 +129,18 @@ Go to tower.nf and follow these steps:
 
 1. Create a compute environment
 
-- Choose a name
-- Select Amazon Batch as platform
-- Use as credentials your user's AWS access key ID and secret for the nf-core AWS account.
-- Region: eu-west-1
-- Storage type: AWS S3
-- Pipeline work directory: any path under s3://nf-core-awsmegatests will work (if it does not exist it creates it)
-- Head queue: nf-core-head
-- Compute queue: default-9bc88600-ab1e-11ea-8954-02ea27505f6c (the exact numbers will change if the CloudFormation template is re-run again, but the name should start by "default")
-- Leave the Head Job role and Compute Job role fields empty.
+  - Choose a name
+  - Select Amazon Batch as platform
+  - Use as credentials your user's AWS access key ID and secret for the nf-core AWS account.
+  - Region: eu-west-1
+  - Storage type: AWS S3
+  - Pipeline work directory: any path under s3://nf-core-awsmegatests will work (if it does not exist it creates it)
+  - Head queue: nf-core-head
+  - Compute queue: default-9bc88600-ab1e-11ea-8954-02ea27505f6c (the exact numbers will change if the CloudFormation template is re-run again, but the name should start by "default")
+  - Leave the Head Job role and Compute Job role fields empty.
 
 2. Launch your pipeline with the defined compute environment.
 
-- Fill in the fields, it's straight-forward. Don't forget to specify the `--output` directory parameter so you can find your results.
+  - Fill in the fields, it's straight-forward. Don't forget to specify the `--output` directory parameter so you can find your results.
 
 3. Enjoy monitoring your AWS run!
