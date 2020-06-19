@@ -12,6 +12,7 @@ for AWS pipeline tests.
   - [Step 3: Set up the Nextflow resources](#step-3:-set-up-the-nextflow-resources)
   - [Step 4: Set up GitHub Actions](#step-4:-set-up-github-actions)
 - [Using the same infrastructure for Nextflow Tower Launch](#using-the-same-infrastructure-for-nextflow-tower-launch)
+- [Launch your AWS jobs with Nextflow Tower](#launch-your-aws-jobs-with-nextflow-tower)
 
 ## Process overview
 
