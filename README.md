@@ -142,6 +142,11 @@ Go to [tower.nf](tower.nf) and follow these steps:
 
 2. Launch your pipeline with the defined compute environment.
 
-  - Fill in the fields, it's straight-forward. Don't forget to specify the `-outdir` directory parameter so you can find your results.
+  - Fill in the fields, it's straight-forward. Don't forget to specify the `outdir` directory parameter so you can find your results, e.g.:
+  ```
+  params{
+  outdir = 's3://nf-core-awsmegatests/foobar'
+  }
+  ```
 
 3. Enjoy monitoring your AWS run!
