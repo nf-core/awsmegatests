@@ -1,14 +1,7 @@
 name: nf-core aws test
 # This workflow is triggered on pushes and PRs to the master branch.
 # It runs the -profile 'test' on AWS batch
-on:
-  push:
-  pull_request:
-    branches:
-      - master
-  release:
-    types: [published]
-
+on: [workflow_dispatch]
 jobs:
     run-awstest:
         runs-on: ubuntu-latest
