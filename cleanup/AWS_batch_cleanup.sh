@@ -1,5 +1,6 @@
 #!/bin/bash
-# WARNING: this script will help you deregister all job definitions, and disable and remove all job queues 
+# WARNING: this script will help you deregister all job definitions, 
+# and disable and remove all job queues 
 # and compute environments in your AWS account, in the specified region
 # Based on https://ec2spotworkshops.com/nextflow-on-aws-batch/60_cleanup.html
 # -----------------------------------------------
