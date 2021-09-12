@@ -1,6 +1,6 @@
 # AWSmegatests: running nf-core pipeline tests on AWS
 
-[:warning:] This repository has been archived because we are not using these templates to create the infrastructure required for the AWS megatests, but rather Tower Forge (tower.nf).
+:warning: This repository has been archived because we are not using these templates to create the infrastructure required for the AWS megatests, but rather Tower Forge (tower.nf).
 
 CloudFormation templates to set up the necessary cloud infrastructure
 for AWS pipeline tests.
